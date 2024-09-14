@@ -11,18 +11,16 @@ namespace ConferenceRoomBooking.API.Extensions
             return result.Match<ActionResult>(
                 success =>
                 {
-                    if (statusCode == StatusCodes.Status200OK &&
-                        (success == null || (success is IEnumerable<object> enumerable && !enumerable.Any())))
+                    if (success == null || (success is IEnumerable<object> enumerable && !enumerable.Any()))
                     {
                         return new NoContentResult();
                     }
-                    
-                    if (statusCode == StatusCodes.Status201Created)
-                    {
-                        return new CreatedResult(location, success);
-                    }
 
-                    return new OkObjectResult(success);
+                    return statusCode switch
+                    {
+                        StatusCodes.Status201Created => new CreatedResult(location, success),
+                        _ => new OkObjectResult(success)
+                    };
                 },
                 exception =>
                 {
@@ -31,12 +29,7 @@ namespace ConferenceRoomBooking.API.Extensions
                         NotFoundException => new NotFoundObjectResult(new { Error = exception.Message }),
                         ValidationModelException validationEx => new BadRequestObjectResult(new
                         {
-                            Errors = validationEx.Errors
-                                .GroupBy(e => e.PropertyName)
-                                .ToDictionary(
-                                    g => g.Key,
-                                    g => g.Select(e => e.ErrorMessage).ToArray()
-                                )
+                            Errors = validationEx.Errors.Select(e => e.ErrorMessage).ToList()
                         }),
                         _ => new StatusCodeResult(StatusCodes.Status500InternalServerError),
                     };
@@ -48,21 +41,11 @@ namespace ConferenceRoomBooking.API.Extensions
             return result.Match<ActionResult>(
                 () =>
                 {
-                    if (statusCode == StatusCodes.Status204NoContent)
+                    return statusCode switch
                     {
-                        return new NoContentResult();
-                    }
-
-                    if (statusCode == StatusCodes.Status201Created)
-                    {
-                        return new CreatedResult();
-                    }
-
-                    return new ContentResult
-                    {
-                        StatusCode = statusCode,
-                        Content = null,
-                        ContentType = "application/json"
+                        StatusCodes.Status201Created => new CreatedResult(),
+                        StatusCodes.Status204NoContent => new NoContentResult(),
+                        _ => new StatusCodeResult(statusCode),
                     };
                 },
                 exception =>
@@ -72,12 +55,7 @@ namespace ConferenceRoomBooking.API.Extensions
                         NotFoundException => new NotFoundObjectResult(new { Error = exception.Message }),
                         ValidationModelException validationEx => new BadRequestObjectResult(new
                         {
-                            Errors = validationEx.Errors
-                                .GroupBy(e => e.PropertyName)
-                                .ToDictionary(
-                                    g => g.Key,
-                                    g => g.Select(e => e.ErrorMessage).ToArray()
-                                )
+                            Errors = validationEx.Errors.Select(e => e.ErrorMessage).ToList()
                         }),
                         _ => new StatusCodeResult(StatusCodes.Status500InternalServerError),
                     };
