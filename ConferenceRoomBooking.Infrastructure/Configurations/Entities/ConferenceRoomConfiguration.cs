@@ -15,21 +15,27 @@ namespace ConferenceRoomBooking.Infrastructure.Configurations.Entities
                     Id = Guid.NewGuid(),
                     Name = "A",
                     Capacity = 50,
-                    PricePerHour = 2000
+                    PricePerHour = 2000,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 },
                 new ConferenceRoom
                 {
                     Id = Guid.NewGuid(),
                     Name = "B",
                     Capacity = 100,
-                    PricePerHour = 3500
+                    PricePerHour = 3500,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 },
                 new ConferenceRoom
                 {
                     Id = Guid.NewGuid(),
                     Name = "C",
                     Capacity = 30,
-                    PricePerHour = 1500
+                    PricePerHour = 1500,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 }
             );
         }

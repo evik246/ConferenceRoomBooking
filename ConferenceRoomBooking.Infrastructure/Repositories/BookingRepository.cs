@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Application.Contracts;
+﻿using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs.BookingRequest;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Infrastructure.Repositories
 {
-    public class BookingRepository : GenericRepository<Booking, BookingFilterDto>, IBookingRepository
+    public class BookingRepository : RepositoryBase<Booking, BookingFilterDto>, IBookingRepository
     {
         public BookingRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
         {
@@ -17,6 +17,7 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
             try
             {
                 var query = _dbContext.Set<Booking>().AsQueryable();
+                query = query.Include(b => b.ConferenceRoom);
 
                 if (filter.Guids != null && filter.Guids.Any())
                 {

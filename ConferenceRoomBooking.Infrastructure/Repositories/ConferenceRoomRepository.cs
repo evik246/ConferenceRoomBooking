@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Application.Contracts;
+﻿using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
@@ -7,7 +7,7 @@ using System;
 
 namespace ConferenceRoomBooking.Infrastructure.Repositories
 {
-    public class ConferenceRoomRepository : GenericRepository<ConferenceRoom, ConferenceRoomFilterDto>, IConferenceRoomRepository
+    public class ConferenceRoomRepository : RepositoryBase<ConferenceRoom, ConferenceRoomFilterDto>, IConferenceRoomRepository
     {
         public ConferenceRoomRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
         {

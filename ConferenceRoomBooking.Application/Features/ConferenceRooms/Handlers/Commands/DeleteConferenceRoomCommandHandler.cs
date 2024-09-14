@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Application.Contracts;
+using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.Features.ConferenceRooms.Requests.Commands;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;

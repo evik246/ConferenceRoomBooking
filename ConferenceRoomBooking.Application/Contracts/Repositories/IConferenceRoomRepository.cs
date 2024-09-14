@@ -2,9 +2,9 @@
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
 
-namespace ConferenceRoomBooking.Application.Contracts
+namespace ConferenceRoomBooking.Application.Contracts.Repositories
 {
-    public interface IConferenceRoomRepository : IGenericRepository<ConferenceRoom, ConferenceRoomFilterDto>
+    public interface IConferenceRoomRepository : IRepositoryBase<ConferenceRoom, ConferenceRoomFilterDto>
     {
         Task<Result<ICollection<ConferenceRoom>>> GetAvailableRoomsAsync(ConferenceRoomFilterDto filter);
     }

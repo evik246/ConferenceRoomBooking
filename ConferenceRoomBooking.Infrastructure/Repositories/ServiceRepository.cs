@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Application.Contracts;
+﻿using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs.ServiceRequest;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Infrastructure.Repositories
 {
-    public class ServiceRepository : GenericRepository<Service, ServiceFilterDto>, IServiceRepository
+    public class ServiceRepository : RepositoryBase<Service, ServiceFilterDto>, IServiceRepository
     {
         public ServiceRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
         {

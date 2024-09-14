@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Application.Contracts;
+using ConferenceRoomBooking.Application.Contracts.Repositories;
+using ConferenceRoomBooking.Application.Contracts.Services;
 using ConferenceRoomBooking.Application.DTOs.BookingRequest;
 using ConferenceRoomBooking.Application.Features.Bookings.Requests.Queries;
 using ConferenceRoomBooking.Application.Responces;
@@ -11,11 +12,13 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Queries
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
+        private readonly IPriceCalculationService _priceCalculationService;
 
-        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper)
+        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IPriceCalculationService priceCalculationService)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
+            _priceCalculationService = priceCalculationService;
         }
 
         public async Task<Result<List<BookingDto>>> Handle(GetBookingListRequest request, CancellationToken cancellationToken)
@@ -23,9 +26,19 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Queries
             var bookingResult = await _bookingRepository.GetAsync(request.BookingFilterDto);
 
             return bookingResult.Match(
-                bookings => new Result<List<BookingDto>>(_mapper.Map<List<BookingDto>>(bookings.ToList())),
-                exception => new Result<List<BookingDto>>(exception)
-            );
+            bookings => {
+                var bookingDtos = _mapper.Map<List<BookingDto>>(bookings.ToList());
+
+                foreach (var booking in bookings)
+                {
+                    var bookingDto = bookingDtos.First(b => b.Id == booking.Id);
+                    bookingDto.TotalPrice = _priceCalculationService.CalculateTotalPrice(booking.DateTime, booking.HourAmount, booking.ConferenceRoom.PricePerHour);
+                }
+
+                return new Result<List<BookingDto>>(bookingDtos);
+            },
+            exception => new Result<List<BookingDto>>(exception)
+        );
         }
     }
 }

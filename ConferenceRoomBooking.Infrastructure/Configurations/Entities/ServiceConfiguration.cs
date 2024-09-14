@@ -14,19 +14,25 @@ namespace ConferenceRoomBooking.Infrastructure.Configurations.Entities
                 {
                     Id = Guid.NewGuid(),
                     Name = "Проєктор",
-                    Price = 500
+                    Price = 500,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 },
                 new Service
                 {
                     Id = Guid.NewGuid(),
                     Name = "Wi-Fi",
-                    Price = 300
+                    Price = 300,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 },
                 new Service
                 {
                     Id = Guid.NewGuid(),
                     Name = "Звук",
-                    Price = 700
+                    Price = 700,
+                    DateCreated = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
                 }
             );
         }

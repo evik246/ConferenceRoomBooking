@@ -1,5 +1,7 @@
-﻿using ConferenceRoomBooking.Application.Contracts;
+﻿using ConferenceRoomBooking.Application.Contracts.Repositories;
+using ConferenceRoomBooking.Application.Contracts.Services;
 using ConferenceRoomBooking.Infrastructure.Repositories;
+using ConferenceRoomBooking.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +18,12 @@ namespace ConferenceRoomBooking.Infrastructure
                     configuration.GetConnectionString("ConferenceRoomBookingConnectionString")
             ));
 
-            services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+            services.AddScoped(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
             
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IPriceCalculationService, PriceCalculationService>();
 
             return services;
         }

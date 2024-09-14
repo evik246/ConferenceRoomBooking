@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConferenceRoomBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(ConferenceRoomBookingDbContext))]
-    [Migration("20240913205333_Seeding")]
+    [Migration("20240914011952_Seeding")]
     partial class Seeding
     {
         /// <inheritdoc />
@@ -98,28 +98,28 @@ namespace ConferenceRoomBooking.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5fcc5da0-eeeb-44cf-8e09-9f2969c26456"),
+                            Id = new Guid("725dc2f9-b606-4d3e-a9cf-c3e5334cc901"),
                             Capacity = 50,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3034),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3084),
                             Name = "A",
                             PricePerHour = 2000m
                         },
                         new
                         {
-                            Id = new Guid("5a9f9296-10f1-4716-9124-c44952a4b96c"),
+                            Id = new Guid("801dfec5-ec5c-43f2-bfca-a8202faf3fb9"),
                             Capacity = 100,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3087),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3088),
                             Name = "B",
                             PricePerHour = 3500m
                         },
                         new
                         {
-                            Id = new Guid("d9aad8f7-ad86-4979-b47b-63afcca8c55e"),
+                            Id = new Guid("5bff1fc7-c763-4016-bf84-c37e8a3963f1"),
                             Capacity = 30,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3089),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3090),
                             Name = "C",
                             PricePerHour = 1500m
                         });
@@ -152,25 +152,25 @@ namespace ConferenceRoomBooking.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a8c4d30f-7469-48cd-96e0-dd66d121aebe"),
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("2ae51f1f-16db-463d-a3c6-9bdb186edfe7"),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3830),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3839),
                             Name = "Проєктор",
                             Price = 500m
                         },
                         new
                         {
-                            Id = new Guid("8b6e44e4-9f01-4818-b9cb-3a3360ceaa7f"),
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("5f5c3b94-e920-43cd-8380-72a83924e177"),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3841),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3842),
                             Name = "Wi-Fi",
                             Price = 300m
                         },
                         new
                         {
-                            Id = new Guid("28281559-6af0-4e08-b477-1d60fab8ae9c"),
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("b2bda178-dc09-4c91-a18b-a9c704e11578"),
+                            DateCreated = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3844),
+                            LastModifiedDate = new DateTime(2024, 9, 14, 4, 19, 52, 374, DateTimeKind.Local).AddTicks(3845),
                             Name = "Звук",
                             Price = 700m
                         });

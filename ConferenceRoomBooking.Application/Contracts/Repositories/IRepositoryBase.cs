@@ -1,9 +1,9 @@
 ﻿using ConferenceRoomBooking.Application.DTOs;
 using ConferenceRoomBooking.Application.Responces;
 
-namespace ConferenceRoomBooking.Application.Contracts
+namespace ConferenceRoomBooking.Application.Contracts.Repositories
 {
-    public interface IGenericRepository<T, F>
+    public interface IRepositoryBase<T, F>
         where T : class
         where F : BaseFilterDto
     {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Application.Contracts;
+using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest.Validators;
 using ConferenceRoomBooking.Application.DTOs.ServiceRequest;
@@ -31,7 +31,7 @@ namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Co
 
             if (!validationResult.IsValid)
             {
-                return new Result<ConferenceRoomDto>(new ValidationException(validationResult));
+                return new Result<ConferenceRoomDto>(new ValidationModelException(validationResult));
             }
 
             var conferenceRoom = _mapper.Map<ConferenceRoom>(request.UpdateConferenceRoomRequestDto);

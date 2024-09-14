@@ -7,7 +7,7 @@ using MediatR;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest.Validators;
 using ConferenceRoomBooking.Application.Exceptions;
 using ConferenceRoomBooking.Application.Responces;
-using ConferenceRoomBooking.Application.Contracts;
+using ConferenceRoomBooking.Application.Contracts.Repositories;
 
 namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Commands
 {
@@ -31,7 +31,7 @@ namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Co
 
             if (!validationResult.IsValid)
             {
-                return new Result<ConferenceRoomDto>(new ValidationException(validationResult));
+                return new Result<ConferenceRoomDto>(new ValidationModelException(validationResult));
             }
 
             var conferenceRoom = _mapper.Map<ConferenceRoom>(request.CreateConferenceRoomRequestDto);

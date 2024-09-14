@@ -1,17 +1,17 @@
-﻿using ConferenceRoomBooking.Application.Contracts;
+﻿using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs;
 using ConferenceRoomBooking.Application.Responces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Infrastructure.Repositories
 {
-    public class GenericRepository<T, F> : IGenericRepository<T, F> 
+    public class RepositoryBase<T, F> : IRepositoryBase<T, F> 
         where T : class 
         where F : BaseFilterDto
     {
         protected readonly ConferenceRoomBookingDbContext _dbContext;
 
-        public GenericRepository(ConferenceRoomBookingDbContext dbContext)
+        public RepositoryBase(ConferenceRoomBookingDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -1,4 +1,5 @@
 ﻿using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
+using ConferenceRoomBooking.Application.Exceptions;
 using ConferenceRoomBooking.Application.Features.ConferenceRooms.Requests.Commands;
 using ConferenceRoomBooking.Application.Features.ConferenceRooms.Requests.Queries;
 using MediatR;
@@ -23,7 +24,24 @@ namespace ConferenceRoomBooking.API.Controllers
             var request = new GetAvailableConferenceRoomListRequest() { ConferenceRoomFilterDto = value };
             var availableConferenceRoomsResult = await _mediator.Send(request);
 
-            return Ok(availableConferenceRoomsResult.Value);
+            return availableConferenceRoomsResult.Match<ActionResult>(
+                result =>
+                {
+                    if (result.Count == 0)
+                    {
+                        return NoContent();
+                    }
+                    return Ok(result);
+                },
+                exception =>
+                {
+                    return exception switch
+                    {
+                        ValidationModelException validationEx => BadRequest(validationEx.Message),
+                        _ => StatusCode(500),
+                    };
+                }
+            );
         }
 
         [HttpPost]

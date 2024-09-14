@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Application.Contracts;
+using ConferenceRoomBooking.Application.Contracts.Repositories;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest.Validators;
 using ConferenceRoomBooking.Application.Exceptions;
@@ -27,7 +27,7 @@ namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Qu
 
             if (!validationResult.IsValid)
             {
-                return new Result<List<ConferenceRoomDto>>(new ValidationException(validationResult));
+                return new Result<List<ConferenceRoomDto>>(new ValidationModelException(validationResult));
             }
 
             var availableRoomsResult = await _conferenceRoomRepository.GetAvailableRoomsAsync(request.ConferenceRoomFilterDto);

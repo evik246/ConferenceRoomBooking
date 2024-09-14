@@ -11,8 +11,12 @@ namespace ConferenceRoomBooking.Application.Profiles
         public MappingProfile() 
         {
             CreateMap<ConferenceRoom, ConferenceRoomDto>().ReverseMap();
+            
             CreateMap<Service, ServiceDto>().ReverseMap();
+
             CreateMap<Booking, CreateBookingRequestDto>().ReverseMap();
+            CreateMap<Booking, BookingDto>();
+
             CreateMap<CreateConferenceRoomRequestDto, ServiceFilterDto>()
                 .ForMember(dest => dest.Guids, opt => opt.MapFrom(src => src.ServiceIds));
             CreateMap<UpdateConferenceRoomRequestDto, ServiceFilterDto>()
