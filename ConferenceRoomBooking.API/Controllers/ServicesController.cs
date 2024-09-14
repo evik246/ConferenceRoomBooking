@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Application.DTOs.ServiceRequest;
-using ConferenceRoomBooking.Application.Exceptions;
+﻿using ConferenceRoomBooking.API.Extensions;
+using ConferenceRoomBooking.Application.DTOs.ServiceRequest;
 using ConferenceRoomBooking.Application.Features.Services.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,24 +23,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var request = new GetServiceListRequest() { ServiceFilterDto = value };
             var servicesResult = await _mediator.Send(request);
 
-            return servicesResult.Match<ActionResult>(
-                result =>
-                {
-                    if (result.Count == 0)
-                    {
-                        return NoContent();
-                    }
-                    return Ok(result);
-                },
-                exception =>
-                {
-                    return exception switch
-                    {
-                        ValidationModelException validationEx => BadRequest(validationEx.Errors),
-                        _ => StatusCode(500),
-                    };
-                }
-            );
+            return servicesResult.ToActionResult();
         }
 
         [HttpGet("{id}")]
@@ -49,18 +32,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var request = new GetServiceRequest() { Id = id };
             var serviceResult = await _mediator.Send(request);
 
-            return serviceResult.Match<ActionResult>(
-                result => Ok(result),
-                exception =>
-                {
-                    return exception switch
-                    {
-                        NotFoundException notFoundEx => NotFound(notFoundEx.Message),
-                        ValidationModelException validationEx => BadRequest(validationEx.Errors),
-                        _ => StatusCode(500),
-                    };
-                }
-            );
+            return serviceResult.ToActionResult();
         }
     }
 }

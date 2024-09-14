@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Application.Exceptions;
+﻿using ConferenceRoomBooking.API.Extensions;
+using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Application.Features.ConferenceRooms.Requests.Commands;
 using ConferenceRoomBooking.Application.Features.ConferenceRooms.Requests.Queries;
 using MediatR;
@@ -24,24 +24,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var request = new GetAvailableConferenceRoomListRequest() { ConferenceRoomFilterDto = value };
             var availableConferenceRoomsResult = await _mediator.Send(request);
 
-            return availableConferenceRoomsResult.Match<ActionResult>(
-                result =>
-                {
-                    if (result.Count == 0)
-                    {
-                        return NoContent();
-                    }
-                    return Ok(result);
-                },
-                exception =>
-                {
-                    return exception switch
-                    {
-                        ValidationModelException validationEx => BadRequest(validationEx.Message),
-                        _ => StatusCode(500),
-                    };
-                }
-            );
+            return availableConferenceRoomsResult.ToActionResult();
         }
 
         [HttpPost]
@@ -50,7 +33,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var command = new CreateConferenceRoomCommand() { CreateConferenceRoomRequestDto = value };
             var createdConferenceRoomResult = await _mediator.Send(command);
 
-            return Ok(createdConferenceRoomResult.Value);
+            return createdConferenceRoomResult.ToActionResult(StatusCodes.Status201Created);
         }
 
         [HttpPut("{id}")]
@@ -59,7 +42,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var command = new UpdateConferenceRoomCommand() { Id = id, UpdateConferenceRoomRequestDto = value };
             var updatedConferenceRoomResult = await _mediator.Send(command);
 
-            return Ok(updatedConferenceRoomResult.Value);
+            return updatedConferenceRoomResult.ToActionResult();
         }
 
         [HttpDelete("{id}")]
@@ -68,7 +51,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var command = new DeleteConferenceRoomCommand() { Id = id };
             var result = await _mediator.Send(command);
 
-            return Ok(result);
+            return result.ToActionResult();
         }
     }
 }

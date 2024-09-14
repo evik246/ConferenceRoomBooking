@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Application.DTOs.BookingRequest;
-using ConferenceRoomBooking.Application.Exceptions;
+﻿using ConferenceRoomBooking.API.Extensions;
+using ConferenceRoomBooking.Application.DTOs.BookingRequest;
 using ConferenceRoomBooking.Application.Features.Bookings.Requests.Commands;
 using ConferenceRoomBooking.Application.Features.Bookings.Requests.Queries;
 using MediatR;
@@ -24,24 +24,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var request = new GetBookingListRequest() { BookingFilterDto = value };
             var bookingsResult = await _mediator.Send(request);
 
-            return bookingsResult.Match<ActionResult>(
-                result =>
-                {
-                    if (result.Count == 0)
-                    {
-                        return NoContent();
-                    }
-                    return Ok(result);
-                },
-                exception =>
-                {
-                    return exception switch
-                    {
-                        ValidationModelException validationEx => BadRequest(validationEx.Errors),
-                        _ => StatusCode(500),
-                    };
-                }
-            );
+            return bookingsResult.ToActionResult();
         }
 
         [HttpPost]
@@ -50,18 +33,7 @@ namespace ConferenceRoomBooking.API.Controllers
             var command = new CreateBookingCommand() { CreateBookingRequestDto = value };
             var createdBookingResult = await _mediator.Send(command);
 
-            return createdBookingResult.Match<ActionResult>(
-                result => Ok(result),
-                exception =>
-                {
-                    return exception switch
-                    {
-                        NotFoundException notFoundEx => NotFound(notFoundEx.Message),
-                        ValidationModelException validationEx => BadRequest(validationEx.Errors),
-                        _ => StatusCode(500),
-                    };
-                }
-            );
+            return createdBookingResult.ToActionResult(StatusCodes.Status201Created);
         }
     }
 }

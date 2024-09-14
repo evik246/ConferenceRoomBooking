@@ -22,19 +22,48 @@ namespace ConferenceRoomBooking.Application.DTOs.BookingRequest.Validators
                 .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0");
 
             RuleFor(p => p)
-                .Must(IsWithinAllowedTimeRange)
+                .Must(dto => IsWithinAllowedTimeRange(dto, new TimeSpan(6, 0, 0), new TimeSpan(23, 0, 0)))
                 .WithMessage("Booking must be within the allowed time range from 06:00 to 23:00.");
         }
 
-        private bool IsWithinAllowedTimeRange(CreateBookingRequestDto dto)
+        private bool IsWithinAllowedTimeRange(CreateBookingRequestDto dto, TimeSpan allowedStartTime, TimeSpan allowedEndTime)
         {
+            // Get the start and end times of the booking
             var startTime = dto.DateTime.TimeOfDay;
             var endTime = dto.DateTime.AddHours(dto.HourAmount).TimeOfDay;
+            var bookingDate = dto.DateTime.Date;
+            var endDate = dto.DateTime.AddHours(dto.HourAmount).Date;
 
-            var morningTime = new TimeSpan(6, 0, 0);
-            var eveningTime = new TimeSpan(23, 0, 0);
+            // Check for bookings that span multiple days
+            if (bookingDate != endDate)
+            {
+                // Create DateTime objects for allowed start and end times on each relevant day
+                var firstDayEnd = new DateTime(bookingDate.Year, bookingDate.Month, bookingDate.Day, allowedEndTime.Hours, allowedEndTime.Minutes, allowedEndTime.Seconds);
+                var lastDayStart = new DateTime(endDate.Year, endDate.Month, endDate.Day, allowedStartTime.Hours, allowedStartTime.Minutes, allowedStartTime.Seconds);
 
-            return startTime >= morningTime && endTime <= eveningTime;
+                // Check if the booking starts before the allowed start time or ends after the allowed end time
+                if (startTime < allowedStartTime || endTime > allowedEndTime)
+                {
+                    // If the booking ends before or exactly at the allowed end time on the first day
+                    if (endTime <= allowedEndTime && firstDayEnd.TimeOfDay >= endTime)
+                    {
+                        return true;
+                    }
+                    // If the booking starts after or exactly at the allowed start time on the last day
+                    if (startTime >= allowedStartTime && endTime > allowedEndTime)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return false;
+            }
+
+            // Check that the booking is within the allowed time range on the same day
+            return startTime >= allowedStartTime && endTime <= allowedEndTime;
         }
+
     }
 }

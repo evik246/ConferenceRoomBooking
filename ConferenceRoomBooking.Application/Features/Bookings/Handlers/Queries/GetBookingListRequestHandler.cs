@@ -12,9 +12,9 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Queries
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
-        private readonly IPriceCalculationService _priceCalculationService;
+        private readonly IBookingPriceCalculationService _priceCalculationService;
 
-        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IPriceCalculationService priceCalculationService)
+        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IBookingPriceCalculationService priceCalculationService)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
@@ -32,7 +32,7 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Queries
                 foreach (var booking in bookings)
                 {
                     var bookingDto = bookingDtos.First(b => b.Id == booking.Id);
-                    bookingDto.TotalPrice = _priceCalculationService.CalculateTotalPrice(booking.DateTime, booking.HourAmount, booking.ConferenceRoom.PricePerHour);
+                    bookingDto.TotalPrice = _priceCalculationService.CalculateTotalPrice(booking);
                 }
 
                 return new Result<List<BookingDto>>(bookingDtos);

@@ -1,10 +1,20 @@
 ﻿using ConferenceRoomBooking.Application.Contracts.Services;
+using ConferenceRoomBooking.Domain.Entities;
 
 namespace ConferenceRoomBooking.Infrastructure.Services
 {
-    public class PriceCalculationService : IPriceCalculationService
+    public class BookingPriceCalculationService : IBookingPriceCalculationService
     {
-        public decimal CalculateTotalPrice(DateTime bookingTime, int hourAmount, decimal basePrice)
+        public decimal CalculateTotalPrice(Booking booking)
+        {
+            var servicePrices = booking.Services?.Select(service => (int)service.Price).ToArray() ?? new int[0];
+
+            var totalPrice = CalculateTotalPrice(booking.DateTime, booking.HourAmount, booking.ConferenceRoom.PricePerHour, servicePrices);
+
+            return totalPrice;
+        }
+
+        public decimal CalculateTotalPrice(DateTime bookingTime, int hourAmount, decimal basePrice, params int[] servicePrices)
         {
             decimal totalPrice = 0;
 
@@ -28,6 +38,11 @@ namespace ConferenceRoomBooking.Infrastructure.Services
                 {
                     totalPrice += basePrice * 1.15m;
                 }
+            }
+
+            foreach (var servicePrice in servicePrices)
+            {
+                totalPrice += servicePrice;
             }
 
             return totalPrice;

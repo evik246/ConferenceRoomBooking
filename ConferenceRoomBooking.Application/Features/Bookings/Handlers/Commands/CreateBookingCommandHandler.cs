@@ -18,10 +18,10 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
         private readonly IBookingRepository _bookingRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
-        private readonly IPriceCalculationService _priceCalculationService;
+        private readonly IBookingPriceCalculationService _priceCalculationService;
         private readonly IConferenceRoomRepository _conferenceRoomRepository;
 
-        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IMapper mapper, IServiceRepository serviceRepository, IPriceCalculationService priceCalculationService, IConferenceRoomRepository conferenceRoomRepository)
+        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IMapper mapper, IServiceRepository serviceRepository, IBookingPriceCalculationService priceCalculationService, IConferenceRoomRepository conferenceRoomRepository)
         {
             _bookingRepository = bookingRepository;
             _serviceRepository = serviceRepository;
@@ -56,21 +56,25 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
             var booking = _mapper.Map<Booking>(request.CreateBookingRequestDto);
             booking.ConferenceRoom = conferenceRoom;
 
-            var totalPrice = _priceCalculationService.CalculateTotalPrice(booking.DateTime, booking.HourAmount, booking.ConferenceRoom.PricePerHour);
-
             if (request.CreateBookingRequestDto.ServiceIds != null && request.CreateBookingRequestDto.ServiceIds.Any())
             {
                 var serviceFilter = new ServiceFilterDto() { Guids = request.CreateBookingRequestDto.ServiceIds.ToList() };
                 var servicesResult = await _serviceRepository.GetAsync(serviceFilter);
 
-                servicesResult.MatchSuccess(
-                    services => booking.Services = services.ToList()
+                var services = servicesResult.Match(
+                    services => services.ToList(),
+                    exception => null
                 );
 
-                return servicesResult.MatchFailure(
-                    exception => new Result<BookingDto>(new NotFoundException(nameof(Service)))
-                );
+                if (services == null || services.Count != request.CreateBookingRequestDto.ServiceIds.Count)
+                {
+                    return new Result<BookingDto>(new NotFoundException(nameof(Service)));
+                }
+
+                booking.Services = services;
             }
+
+            var totalPrice = _priceCalculationService.CalculateTotalPrice(booking);
 
             var bookingResult = await _bookingRepository.AddAsync(booking);
 

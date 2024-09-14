@@ -16,8 +16,10 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
         {
             try
             {
-                var query = _dbContext.Set<Booking>().AsQueryable();
-                query = query.Include(b => b.ConferenceRoom);
+                var query = _dbContext.Set<Booking>()
+                    .Include(b => b.ConferenceRoom)
+                    .Include(b => b.Services)
+                    .AsQueryable();
 
                 if (filter.Guids != null && filter.Guids.Any())
                 {
