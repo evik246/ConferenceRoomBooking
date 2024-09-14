@@ -18,10 +18,10 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
         private readonly IBookingRepository _bookingRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
-        private readonly IBookingPriceCalculationService _priceCalculationService;
+        private readonly IBookingService _priceCalculationService;
         private readonly IConferenceRoomRepository _conferenceRoomRepository;
 
-        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IMapper mapper, IServiceRepository serviceRepository, IBookingPriceCalculationService priceCalculationService, IConferenceRoomRepository conferenceRoomRepository)
+        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IMapper mapper, IServiceRepository serviceRepository, IBookingService priceCalculationService, IConferenceRoomRepository conferenceRoomRepository)
         {
             _bookingRepository = bookingRepository;
             _serviceRepository = serviceRepository;

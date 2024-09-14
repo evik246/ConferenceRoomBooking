@@ -3,7 +3,7 @@ using ConferenceRoomBooking.Domain.Entities;
 
 namespace ConferenceRoomBooking.Infrastructure.Services
 {
-    public class BookingPriceCalculationService : IBookingPriceCalculationService
+    public class BookingService : IBookingService
     {
         public decimal CalculateTotalPrice(Booking booking)
         {

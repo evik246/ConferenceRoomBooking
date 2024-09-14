@@ -53,5 +53,28 @@ namespace ConferenceRoomBooking.API.Controllers
 
             return createdBookingResult.ToActionResult(StatusCodes.Status201Created);
         }
+
+        /// <summary>
+        /// Retrieves a booking report for the specified date range.
+        /// </summary>
+        /// <param name="startDate">The start date of the report.</param>
+        /// <param name="endDate">The end date of the report.</param>
+        /// <returns>A booking report including total bookings, total revenue, and usage statistics.</returns>
+        /// <response code="200">Returns the booking report for the specified date range.</response>
+        /// <response code="400">The request parameters are invalid.</response>
+        /// <response code="500">An internal server error occurred.</response>
+        [HttpGet("report")]
+        public async Task<ActionResult<BookingReportDto>> GetBookingReport([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var request = new GetBookingReportRequest
+            {
+                StartDate = startDate,
+                EndDate = endDate
+            };
+
+            var reportResult = await _mediator.Send(request);
+
+            return reportResult.ToActionResult();
+        }
     }
 }

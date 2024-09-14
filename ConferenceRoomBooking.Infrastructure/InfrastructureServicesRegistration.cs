@@ -23,7 +23,7 @@ namespace ConferenceRoomBooking.Infrastructure
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IBookingPriceCalculationService, BookingPriceCalculationService>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }

@@ -26,6 +26,16 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
                     query = query.Where(b => filter.Guids.Contains(b.Id));
                 }
 
+                if (filter.StartDate.HasValue)
+                {
+                    query = query.Where(b => b.DateTime >= filter.StartDate.Value);
+                }
+
+                if (filter.EndDate.HasValue)
+                {
+                    query = query.Where(b => b.DateTime <= filter.EndDate.Value);
+                }
+
                 query = query.Skip(filter.Skip).Take(filter.PageSize);
 
                 var bookings = await query.ToListAsync();

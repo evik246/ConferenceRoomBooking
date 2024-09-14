@@ -12,9 +12,9 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Queries
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
-        private readonly IBookingPriceCalculationService _priceCalculationService;
+        private readonly IBookingService _priceCalculationService;
 
-        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IBookingPriceCalculationService priceCalculationService)
+        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IBookingService priceCalculationService)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
