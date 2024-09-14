@@ -6,7 +6,7 @@
         {
         }
 
-        public NotFoundException(string name, string message) : base($"{name} was not found: {message}")
+        public NotFoundException(string name, string key) : base($"{name} ({key}) was not found")
         {
         }
     }

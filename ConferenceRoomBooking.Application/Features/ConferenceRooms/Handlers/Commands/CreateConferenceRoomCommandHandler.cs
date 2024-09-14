@@ -39,16 +39,19 @@ namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Co
             if (request.CreateConferenceRoomRequestDto.ServiceIds != null && 
                 request.CreateConferenceRoomRequestDto.ServiceIds.Any())
             {
-                var serviceFilterDto = _mapper.Map<ServiceFilterDto>(request.CreateConferenceRoomRequestDto);
-                var servicesResult = await _serviceRepository.GetAsync(serviceFilterDto);
+                var serviceFilter = new ServiceFilterDto() { Guids = request.CreateConferenceRoomRequestDto.ServiceIds.ToList() };
+                var servicesResult = await _serviceRepository.GetAsync(serviceFilter);
 
-                servicesResult.MatchSuccess(
-                    services => conferenceRoom.Services = services.ToList()
+                var services = servicesResult.MatchSuccess(
+                    services => services.ToList()
                 );
 
-                return servicesResult.MatchFailure(
-                    exception => new Result<ConferenceRoomDto>(exception)
-                );
+                if (services.Count != request.CreateConferenceRoomRequestDto.ServiceIds.Count)
+                {
+                    return new Result<ConferenceRoomDto>(new NotFoundException(nameof(Service)));
+                }
+
+                conferenceRoom.Services = services;
             }
 
             var createdConferenceRoomResult = await _conferenceRoomRepository.AddAsync(conferenceRoom);

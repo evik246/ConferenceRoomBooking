@@ -34,22 +34,36 @@ namespace ConferenceRoomBooking.Application.Features.ConferenceRooms.Handlers.Co
                 return new Result<ConferenceRoomDto>(new ValidationModelException(validationResult));
             }
 
-            var conferenceRoom = _mapper.Map<ConferenceRoom>(request.UpdateConferenceRoomRequestDto);
-            conferenceRoom.Id = request.Id;
+            var conferenceRoomFilter = new ConferenceRoomFilterDto() { Guids = [request.Id] };
+            var ConferenceRoomResult = await _conferenceRoomRepository.GetAsync(conferenceRoomFilter);
+
+            var conferenceRoom = ConferenceRoomResult.MatchSuccess(
+                conferenceRooms => conferenceRooms.FirstOrDefault()
+            );
+            
+            if (conferenceRoom == null)
+            {
+                return new Result<ConferenceRoomDto>(new NotFoundException(nameof(ConferenceRoom)));
+            }
+
+            _mapper.Map(request.UpdateConferenceRoomRequestDto, conferenceRoom);
 
             if (request.UpdateConferenceRoomRequestDto.ServiceIds != null &&
                 request.UpdateConferenceRoomRequestDto.ServiceIds.Any())
             {
-                var serviceFilterDto = _mapper.Map<ServiceFilterDto>(request.UpdateConferenceRoomRequestDto);
-                var servicesResult = await _serviceRepository.GetAsync(serviceFilterDto);
+                var serviceFilter = new ServiceFilterDto() { Guids = request.UpdateConferenceRoomRequestDto.ServiceIds.ToList() };
+                var servicesResult = await _serviceRepository.GetAsync(serviceFilter);
 
-                servicesResult.MatchSuccess(
-                    services => conferenceRoom.Services = services.ToList()
+                var services = servicesResult.MatchSuccess(
+                    services => services.ToList()
                 );
 
-                return servicesResult.MatchFailure(
-                    exception => new Result<ConferenceRoomDto>(exception)
-                );
+                if (services.Count != request.UpdateConferenceRoomRequestDto.ServiceIds.Count)
+                {
+                    return new Result<ConferenceRoomDto>(new NotFoundException(nameof(Service)));
+                }
+
+                conferenceRoom.Services = services;
             }
 
             var updatedConferenceRoomResult = await _conferenceRoomRepository.UpdateAsync(conferenceRoom);

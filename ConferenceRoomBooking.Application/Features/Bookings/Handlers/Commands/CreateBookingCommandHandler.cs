@@ -9,7 +9,6 @@ using ConferenceRoomBooking.Application.Exceptions;
 using ConferenceRoomBooking.Application.Features.Bookings.Requests.Commands;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
-using FluentValidation.Results;
 using MediatR;
 
 namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
@@ -44,9 +43,8 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
             var conferenceRoomFilter = new ConferenceRoomFilterDto() { Guids = [request.CreateBookingRequestDto.ConferenceRoomId] };
             var conferenceRoomResult = await _conferenceRoomRepository.GetAsync(conferenceRoomFilter);
 
-            var conferenceRoom = conferenceRoomResult.Match(
-                rooms => rooms.FirstOrDefault(),
-                exception => null
+            var conferenceRoom = conferenceRoomResult.MatchSuccess(
+                rooms => rooms.FirstOrDefault()
             );
 
             if (conferenceRoom == null)
@@ -57,17 +55,17 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
             var booking = _mapper.Map<Booking>(request.CreateBookingRequestDto);
             booking.ConferenceRoom = conferenceRoom;
 
-            if (request.CreateBookingRequestDto.ServiceIds != null && request.CreateBookingRequestDto.ServiceIds.Any())
+            if (request.CreateBookingRequestDto.ServiceIds != null && 
+                request.CreateBookingRequestDto.ServiceIds.Any())
             {
                 var serviceFilter = new ServiceFilterDto() { Guids = request.CreateBookingRequestDto.ServiceIds.ToList() };
                 var servicesResult = await _serviceRepository.GetAsync(serviceFilter);
 
-                var services = servicesResult.Match(
-                    services => services.ToList(),
-                    exception => null
+                var services = servicesResult.MatchSuccess(
+                    services => services.ToList()
                 );
 
-                if (services == null || services.Count != request.CreateBookingRequestDto.ServiceIds.Count)
+                if (services.Count != request.CreateBookingRequestDto.ServiceIds.Count)
                 {
                     return new Result<BookingDto>(new NotFoundException(nameof(Service)));
                 }
