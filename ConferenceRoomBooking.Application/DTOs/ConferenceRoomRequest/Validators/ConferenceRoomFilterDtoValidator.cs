@@ -18,6 +18,10 @@ namespace ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest.Validator
 
             RuleFor(p => p.Capacity)
                 .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0");
+
+            RuleFor(p => p.Date)
+                .Must(date => !date.HasValue || date.Value.ToDateTime(TimeOnly.MinValue) >= DateTime.Today)
+                    .WithMessage("{PropertyName} must not be in the past");
         }
     }
 }

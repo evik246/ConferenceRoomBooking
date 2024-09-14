@@ -3,7 +3,6 @@ using ConferenceRoomBooking.Application.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace ConferenceRoomBooking.Infrastructure.Repositories
 {
@@ -17,7 +16,9 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
         {
             try
             {
-                var query = _dbContext.Set<ConferenceRoom>().AsQueryable();
+                var query = _dbContext.Set<ConferenceRoom>()
+                    .Include(b => b.Services)
+                    .AsQueryable();
 
                 if (filter.Guids != null && filter.Guids.Any()) 
                 {
@@ -55,7 +56,9 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
         {
             try
             {
-                var query = _dbContext.Set<ConferenceRoom>().AsQueryable();
+                var query = _dbContext.Set<ConferenceRoom>()
+                    .Include(b => b.Services)
+                    .AsQueryable();
 
                 if (filter.Guids != null && filter.Guids.Any())
                 {
@@ -81,22 +84,27 @@ namespace ConferenceRoomBooking.Infrastructure.Repositories
                 {
                     var bookingsQuery = _dbContext.Set<Booking>().AsQueryable();
 
+                    DateTime startOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue;
+                    DateTime endOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MaxValue) : DateTime.MaxValue;
+
                     if (filter.Date.HasValue)
                     {
-                        bookingsQuery = bookingsQuery.Where(b =>
-                            filter.Date.Value.ToDateTime(TimeOnly.MinValue) == b.DateTime);
+                        bookingsQuery = bookingsQuery.Where(b => b.DateTime.Date == startOfDay.Date);
                     }
 
-                    if (filter.StartTime.HasValue)
+                    if (filter.StartTime.HasValue || filter.EndTime.HasValue)
                     {
-                        var startOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue;
-                        bookingsQuery = bookingsQuery.Where(b => b.DateTime >= startOfDay && b.DateTime.TimeOfDay < filter.StartTime.Value.ToTimeSpan());
-                    }
+                        if (filter.StartTime.HasValue)
+                        {
+                            var startTime = startOfDay.Add(filter.StartTime.Value.ToTimeSpan());
+                            bookingsQuery = bookingsQuery.Where(b => b.DateTime.AddHours(b.HourAmount) > startTime);
+                        }
 
-                    if (filter.EndTime.HasValue)
-                    {
-                        var endOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MaxValue) : DateTime.MaxValue;
-                        bookingsQuery = bookingsQuery.Where(b => b.DateTime <= endOfDay && b.DateTime.TimeOfDay.Add(TimeSpan.FromHours(b.HourAmount)) > filter.EndTime.Value.ToTimeSpan());
+                        if (filter.EndTime.HasValue)
+                        {
+                            var endTime = startOfDay.Add(filter.EndTime.Value.ToTimeSpan());
+                            bookingsQuery = bookingsQuery.Where(b => b.DateTime < endTime);
+                        }
                     }
 
                     var bookedRoomIds = await bookingsQuery

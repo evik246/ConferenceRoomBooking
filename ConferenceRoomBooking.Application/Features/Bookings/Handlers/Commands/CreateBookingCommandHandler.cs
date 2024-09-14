@@ -9,6 +9,7 @@ using ConferenceRoomBooking.Application.Exceptions;
 using ConferenceRoomBooking.Application.Features.Bookings.Requests.Commands;
 using ConferenceRoomBooking.Application.Responces;
 using ConferenceRoomBooking.Domain.Entities;
+using FluentValidation.Results;
 using MediatR;
 
 namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
@@ -67,6 +68,12 @@ namespace ConferenceRoomBooking.Application.Features.Bookings.Handlers.Commands
                 );
 
                 if (services == null || services.Count != request.CreateBookingRequestDto.ServiceIds.Count)
+                {
+                    return new Result<BookingDto>(new NotFoundException(nameof(Service)));
+                }
+
+                var availableServiceIds = conferenceRoom.Services.Select(s => s.Id).ToHashSet();
+                if (!request.CreateBookingRequestDto.ServiceIds.All(id => availableServiceIds.Contains(id)))
                 {
                     return new Result<BookingDto>(new NotFoundException(nameof(Service)));
                 }

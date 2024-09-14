@@ -11,26 +11,18 @@ namespace ConferenceRoomBooking.API.Extensions
             return result.Match<ActionResult>(
                 success =>
                 {
-                    if (statusCode == StatusCodes.Status200OK)
-                    {
-                        return new OkObjectResult(success);
-                    }
-                    else if (statusCode == StatusCodes.Status201Created)
-                    {
-                        return new CreatedResult(location, success);
-                    }
-                    else if (statusCode == StatusCodes.Status204NoContent ||
-                        success == null || (success is IEnumerable<object> enumerable && !enumerable.Any()))
+                    if (statusCode == StatusCodes.Status200OK &&
+                        (success == null || (success is IEnumerable<object> enumerable && !enumerable.Any())))
                     {
                         return new NoContentResult();
                     }
-
-                    return new ContentResult
+                    
+                    if (statusCode == StatusCodes.Status201Created)
                     {
-                        StatusCode = statusCode,
-                        Content = success == null ? null : success.ToString(),
-                        ContentType = "application/json"
-                    };
+                        return new CreatedResult(location, success);
+                    }
+
+                    return new OkObjectResult(success);
                 },
                 exception =>
                 {
@@ -59,6 +51,11 @@ namespace ConferenceRoomBooking.API.Extensions
                     if (statusCode == StatusCodes.Status204NoContent)
                     {
                         return new NoContentResult();
+                    }
+
+                    if (statusCode == StatusCodes.Status201Created)
+                    {
+                        return new CreatedResult();
                     }
 
                     return new ContentResult
