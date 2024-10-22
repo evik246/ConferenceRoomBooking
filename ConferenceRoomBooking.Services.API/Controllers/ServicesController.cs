@@ -1,5 +1,5 @@
 ﻿using ConferenceRoomBooking.Services.API.Extensions;
-using ConferenceRoomBooking.Bll.DTOs.ServiceRequest;
+using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
 using ConferenceRoomBooking.Bll.Features.Services.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
-﻿using ConferenceRoomBooking.Bll.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.DTOs;
-using ConferenceRoomBooking.Bll.Responces;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+using ConferenceRoomBooking.Bll.Common.DTOs;
+using ConferenceRoomBooking.Bll.Common.Responces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories

@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Bll.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Contracts.Services;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+using ConferenceRoomBooking.Bll.Common.Contracts.Services;
 using ConferenceRoomBooking.Dal.Db.Repositories;
 using ConferenceRoomBooking.Dal.Db.Services;
 using Microsoft.EntityFrameworkCore;

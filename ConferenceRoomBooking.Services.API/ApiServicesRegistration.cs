@@ -7,7 +7,7 @@ namespace ConferenceRoomBooking.Services.API
         public static IServiceCollection ConfigureApiServices(this IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
-                typeof(ApplicationServicesRegistration).Assembly
+                typeof(BllServicesRegistration).Assembly
             ));
 
             return services;

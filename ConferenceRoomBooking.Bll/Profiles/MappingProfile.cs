@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.DTOs.BookingRequest;
-using ConferenceRoomBooking.Bll.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.DTOs.ServiceRequest;
+using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
+using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
+using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
 using ConferenceRoomBooking.Bll.Common.Entities;
 
 namespace ConferenceRoomBooking.Bll.Profiles

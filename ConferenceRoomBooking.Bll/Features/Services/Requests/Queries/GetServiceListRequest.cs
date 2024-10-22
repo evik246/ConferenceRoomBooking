@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Bll.DTOs.ServiceRequest;
-using ConferenceRoomBooking.Bll.Responces;
+﻿using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
+using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
 
 namespace ConferenceRoomBooking.Bll.Features.Services.Requests.Queries

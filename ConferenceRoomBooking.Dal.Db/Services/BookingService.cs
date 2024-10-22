@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Bll.Contracts.Services;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Services;
 using ConferenceRoomBooking.Bll.Common.Entities;
 
 namespace ConferenceRoomBooking.Dal.Db.Services

@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Bll.Responces;
+﻿using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
 
 namespace ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Commands

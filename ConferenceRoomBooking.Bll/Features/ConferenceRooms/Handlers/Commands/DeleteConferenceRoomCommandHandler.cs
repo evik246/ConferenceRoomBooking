@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Exceptions;
+using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
+using ConferenceRoomBooking.Bll.Common.Exceptions;
 using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Commands;
-using ConferenceRoomBooking.Bll.Responces;
+using ConferenceRoomBooking.Bll.Common.Responces;
 using ConferenceRoomBooking.Bll.Common.Entities;
 using MediatR;
 

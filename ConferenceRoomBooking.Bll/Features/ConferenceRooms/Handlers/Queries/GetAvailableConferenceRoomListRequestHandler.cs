@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.DTOs.ConferenceRoomRequest.Validators;
-using ConferenceRoomBooking.Bll.Exceptions;
+using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
+using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest.Validators;
+using ConferenceRoomBooking.Bll.Common.Exceptions;
 using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Queries;
-using ConferenceRoomBooking.Bll.Responces;
+using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
 
 namespace ConferenceRoomBooking.Bll.Features.ConferenceRooms.Handlers.Queries

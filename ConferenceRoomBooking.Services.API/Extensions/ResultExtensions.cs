@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Bll.Exceptions;
-using ConferenceRoomBooking.Bll.Responces;
+﻿using ConferenceRoomBooking.Bll.Common.Exceptions;
+using ConferenceRoomBooking.Bll.Common.Responces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConferenceRoomBooking.Services.API.Extensions
