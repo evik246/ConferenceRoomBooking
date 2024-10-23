@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Bll.Common.Entities;
-using ConferenceRoomBooking.Bll.Common.Entities.Common;
+﻿using ConferenceRoomBooking.Dal.Db.Entities;
+using ConferenceRoomBooking.Dal.Db.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Dal.Db
@@ -32,8 +32,8 @@ namespace ConferenceRoomBooking.Dal.Db
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        public DbSet<Booking> Bookings { get; set; }
-        public DbSet<ConferenceRoom> ConferenceRooms { get; set; }
-        public DbSet<Service> Services { get; set; }
+        public DbSet<BookingEntity> Bookings { get; set; }
+        public DbSet<ConferenceRoomEntity> ConferenceRooms { get; set; }
+        public DbSet<ServiceEntity> Services { get; set; }
     }
 }

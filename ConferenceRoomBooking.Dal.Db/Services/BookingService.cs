@@ -1,5 +1,5 @@
 ﻿using ConferenceRoomBooking.Bll.Common.Contracts.Services;
-using ConferenceRoomBooking.Bll.Common.Entities;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Dal.Db.Services
 {

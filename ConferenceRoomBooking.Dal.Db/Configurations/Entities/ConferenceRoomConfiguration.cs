@@ -1,16 +1,16 @@
-﻿using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Dal.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
 {
-    public class ConferenceRoomConfiguration : IEntityTypeConfiguration<ConferenceRoom>
+    public class ConferenceRoomConfiguration : IEntityTypeConfiguration<ConferenceRoomEntity>
     {
-        public void Configure(EntityTypeBuilder<ConferenceRoom> builder)
+        public void Configure(EntityTypeBuilder<ConferenceRoomEntity> builder)
         {
             builder.HasData
             (
-                new ConferenceRoom
+                new ConferenceRoomEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "A",
@@ -19,7 +19,7 @@ namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
                     DateCreated = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
                 },
-                new ConferenceRoom
+                new ConferenceRoomEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "B",
@@ -28,7 +28,7 @@ namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
                     DateCreated = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
                 },
-                new ConferenceRoom
+                new ConferenceRoomEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "C",

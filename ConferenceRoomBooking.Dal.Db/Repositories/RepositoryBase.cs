@@ -1,5 +1,5 @@
 ﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs;
+using ConferenceRoomBooking.Bll.Common.Models;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +7,7 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
     public class RepositoryBase<T, F> : IRepositoryBase<T, F> 
         where T : class 
-        where F : BaseFilterDto
+        where F : BaseFilter
     {
         protected readonly ConferenceRoomBookingDbContext _dbContext;
 

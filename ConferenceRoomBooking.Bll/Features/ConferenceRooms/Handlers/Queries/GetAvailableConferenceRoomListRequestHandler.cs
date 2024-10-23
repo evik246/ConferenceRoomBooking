@@ -1,40 +1,37 @@
-﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest.Validators;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
 using ConferenceRoomBooking.Bll.Common.Exceptions;
 using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Queries;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
+using ConferenceRoomBooking.Services.API.DTOs.ConferenceRoomRequest.Validators;
 
 namespace ConferenceRoomBooking.Bll.Features.ConferenceRooms.Handlers.Queries
 {
-    public class GetAvailableConferenceRoomListRequestHandler : IRequestHandler<GetAvailableConferenceRoomListRequest, Result<List<ConferenceRoomDto>>>
+    public class GetAvailableConferenceRoomListRequestHandler : IRequestHandler<GetAvailableConferenceRoomListRequest, Result<List<ConferenceRoom>>>
     {
         private readonly IConferenceRoomRepository _conferenceRoomRepository;
-        private readonly IMapper _mapper;
 
-        public GetAvailableConferenceRoomListRequestHandler(IConferenceRoomRepository conferenceRoomRepository, IMapper mapper) 
+        public GetAvailableConferenceRoomListRequestHandler(IConferenceRoomRepository conferenceRoomRepository) 
         {
             _conferenceRoomRepository = conferenceRoomRepository;
-            _mapper = mapper;
         }
 
-        public async Task<Result<List<ConferenceRoomDto>>> Handle(GetAvailableConferenceRoomListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<List<ConferenceRoom>>> Handle(GetAvailableConferenceRoomListRequest request, CancellationToken cancellationToken)
         {
-            var validator = new ConferenceRoomFilterDtoValidator();
-            var validationResult = await validator.ValidateAsync(request.ConferenceRoomFilterDto);
+            var validator = new ConferenceRoomFilterValidator();
+            var validationResult = await validator.ValidateAsync(request.ConferenceRoomFilter);
 
             if (!validationResult.IsValid)
             {
-                return new Result<List<ConferenceRoomDto>>(new ValidationModelException(validationResult));
+                return new Result<List<ConferenceRoom>>(new ValidationModelException(validationResult));
             }
 
-            var availableRoomsResult = await _conferenceRoomRepository.GetAvailableRoomsAsync(request.ConferenceRoomFilterDto);
+            var availableRoomsResult = await _conferenceRoomRepository.GetAvailableRoomsAsync(request.ConferenceRoomFilter);
 
             return availableRoomsResult.Match(
-                availableRooms => new Result<List<ConferenceRoomDto>>(_mapper.Map<List<ConferenceRoomDto>>(availableRooms.ToList())),
-                exception => new Result<List<ConferenceRoomDto>>(exception)
+                availableRooms => new Result<List<ConferenceRoom>>(availableRooms.ToList()),
+                exception => new Result<List<ConferenceRoom>>(exception)
             );
         }
     }

@@ -4,6 +4,7 @@ using ConferenceRoomBooking.Bll.Features.Services.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using ConferenceRoomBooking.Bll.Common.Models.ServiceModels;
 
 namespace ConferenceRoomBooking.Services.API.Controllers
 {
@@ -32,7 +33,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ServiceDto>>> Get([FromQuery] ServiceFilterDto value)
         {
-            var request = new GetServiceListRequest() { ServiceFilterDto = value };
+            var serviceFilter = _mapper.Map<ServiceFilter>(value);
+            var request = new GetServiceListRequest() { ServiceFilterDto = serviceFilter };
             var servicesResult = await _mediator.Send(request);
 
             return servicesResult.ToActionResult();

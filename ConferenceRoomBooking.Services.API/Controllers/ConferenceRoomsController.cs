@@ -5,6 +5,7 @@ using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
 
 namespace ConferenceRoomBooking.Services.API.Controllers
 {
@@ -33,7 +34,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpGet("available/")]
         public async Task<ActionResult<List<ConferenceRoomDto>>> GetAvailable([FromQuery] ConferenceRoomFilterDto value)
         {
-            var request = new GetAvailableConferenceRoomListRequest() { ConferenceRoomFilterDto = value };
+            var conferenceRoomFilter = _mapper.Map<ConferenceRoomFilter>(value);
+            var request = new GetAvailableConferenceRoomListRequest() { ConferenceRoomFilter = conferenceRoomFilter };
             var availableConferenceRoomsResult = await _mediator.Send(request);
 
             return availableConferenceRoomsResult.ToActionResult();
@@ -51,7 +53,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ConferenceRoomDto>> Post([FromBody] CreateConferenceRoomRequestDto value)
         {
-            var command = new CreateConferenceRoomCommand() { CreateConferenceRoomRequestDto = value };
+            var createConferenceRoom = _mapper.Map<ConferenceRoom>(value);
+            var command = new CreateConferenceRoomCommand() { CreateConferenceRoomRequest = createConferenceRoom };
             var createdConferenceRoomResult = await _mediator.Send(command);
 
             return createdConferenceRoomResult.ToActionResult(StatusCodes.Status201Created);
@@ -70,7 +73,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ConferenceRoomDto>> Put(Guid id, [FromBody] UpdateConferenceRoomRequestDto value)
         {
-            var command = new UpdateConferenceRoomCommand() { Id = id, UpdateConferenceRoomRequestDto = value };
+            var updateConferenceRoom = _mapper.Map<ConferenceRoom>(value);
+            var command = new UpdateConferenceRoomCommand() { UpdateConferenceRoomRequest = updateConferenceRoom };
             var updatedConferenceRoomResult = await _mediator.Send(command);
 
             return updatedConferenceRoomResult.ToActionResult();

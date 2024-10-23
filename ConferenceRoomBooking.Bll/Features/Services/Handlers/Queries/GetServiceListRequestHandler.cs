@@ -1,30 +1,27 @@
-﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
 using ConferenceRoomBooking.Bll.Features.Services.Requests.Queries;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
+using ConferenceRoomBooking.Bll.Common.Models.ServiceModels;
 
 namespace ConferenceRoomBooking.Bll.Features.Services.Handlers.Queries
 {
-    public class GetServiceListRequestHandler : IRequestHandler<GetServiceListRequest, Result<List<ServiceDto>>>
+    public class GetServiceListRequestHandler : IRequestHandler<GetServiceListRequest, Result<List<Service>>>
     {
         private readonly IServiceRepository _serviceRepository;
-        private readonly IMapper _mapper;
 
-        public GetServiceListRequestHandler(IServiceRepository serviceRepository, IMapper mapper)
+        public GetServiceListRequestHandler(IServiceRepository serviceRepository)
         {
             _serviceRepository = serviceRepository;
-            _mapper = mapper;
         }
 
-        public async Task<Result<List<ServiceDto>>> Handle(GetServiceListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<List<Service>>> Handle(GetServiceListRequest request, CancellationToken cancellationToken)
         {
             var servicesResult = await _serviceRepository.GetAsync(request.ServiceFilterDto);
 
             return servicesResult.Match(
-                result => new Result<List<ServiceDto>>(_mapper.Map<List<ServiceDto>>(result.ToList())),
-                exception => new Result<List<ServiceDto>>(exception)
+                result => new Result<List<Service>>(result.ToList()),
+                exception => new Result<List<Service>>(exception)
             );
         }
     }

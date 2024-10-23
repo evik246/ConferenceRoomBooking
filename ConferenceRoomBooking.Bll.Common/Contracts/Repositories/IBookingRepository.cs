@@ -1,9 +1,8 @@
-﻿using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
-using ConferenceRoomBooking.Bll.Common.Models;
+﻿using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Bll.Common.Contracts.Repositories
 {
-    public interface IBookingRepository : IRepositoryBase<Booking, BookingFilterDto>
+    public interface IBookingRepository : IRepositoryBase<Booking, BookingFilter>
     {
     }
 }

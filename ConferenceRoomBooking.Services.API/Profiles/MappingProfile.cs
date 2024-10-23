@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
-using ConferenceRoomBooking.Bll.Common.Entities;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
+using ConferenceRoomBooking.Bll.Common.Models.ServiceModels;
+using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
+using ConferenceRoomBooking.Services.API.DTOs.ConferenceRoomRequest;
+using ConferenceRoomBooking.Services.API.DTOs.ServiceRequest;
 
 namespace ConferenceRoomBooking.Bll.Profiles
 {
@@ -10,7 +12,18 @@ namespace ConferenceRoomBooking.Bll.Profiles
     {
         public MappingProfile() 
         {
-            CreateMap<ConferenceRoom, ConferenceRoomDto>().ReverseMap();
+            CreateMap<BookingFilterDto, BookingFilter>().ReverseMap();
+            CreateMap<CreateBookingRequestDto, Booking>().ReverseMap();
+
+            CreateMap<ConferenceRoomFilterDto, ConferenceRoomFilter>().ReverseMap();
+            CreateMap<CreateConferenceRoomRequestDto, ConferenceRoom>().ReverseMap();
+            CreateMap<UpdateConferenceRoomRequestDto, ConferenceRoom>().ReverseMap()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<ServiceFilterDto, ServiceFilter>().ReverseMap();
+
+
+            /*CreateMap<ConferenceRoom, ConferenceRoomDto>().ReverseMap();
             CreateMap<ConferenceRoom, CreateConferenceRoomRequestDto>().ReverseMap();
             CreateMap<UpdateConferenceRoomRequestDto, ConferenceRoom>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -25,7 +38,7 @@ namespace ConferenceRoomBooking.Bll.Profiles
             CreateMap<UpdateConferenceRoomRequestDto, ServiceFilterDto>()
                 .ForMember(dest => dest.Guids, opt => opt.MapFrom(src => src.ServiceIds));
             CreateMap<CreateBookingRequestDto, ServiceFilterDto>()
-                .ForMember(dest => dest.Guids, opt => opt.MapFrom(src => src.ServiceIds));
+                .ForMember(dest => dest.Guids, opt => opt.MapFrom(src => src.ServiceIds));*/
         }
     }
 }

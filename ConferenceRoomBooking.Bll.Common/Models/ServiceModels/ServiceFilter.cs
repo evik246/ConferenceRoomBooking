@@ -1,4 +1,4 @@
-﻿namespace ConferenceRoomBooking.Bll.Common.Filters.ServiceRequest
+﻿namespace ConferenceRoomBooking.Bll.Common.Models.ServiceModels
 {
     public class ServiceFilter : BaseFilter
     {

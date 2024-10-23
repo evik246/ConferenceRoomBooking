@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConferenceRoomBooking.Bll\ConferenceRoomBooking.Bll.csproj" />
+    <ProjectReference Include="..\ConferenceRoomBooking.Dal.Db\ConferenceRoomBooking.Dal.Db.csproj" />
   </ItemGroup>
 
 </Project>

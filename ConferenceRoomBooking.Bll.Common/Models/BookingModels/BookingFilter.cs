@@ -1,4 +1,4 @@
-﻿namespace ConferenceRoomBooking.Bll.Common.Filters.BookingRequest
+﻿namespace ConferenceRoomBooking.Bll.Common.Models.BookingModels
 {
     public class BookingFilter : BaseFilter
     {

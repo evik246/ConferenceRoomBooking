@@ -1,16 +1,16 @@
-﻿using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Dal.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
 {
-    public class ServiceConfiguration : IEntityTypeConfiguration<Service>
+    public class ServiceConfiguration : IEntityTypeConfiguration<ServiceEntity>
     {
-        public void Configure(EntityTypeBuilder<Service> builder)
+        public void Configure(EntityTypeBuilder<ServiceEntity> builder)
         {
             builder.HasData
             (
-                new Service
+                new ServiceEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "Проєктор",
@@ -18,7 +18,7 @@ namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
                     DateCreated = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
                 },
-                new Service
+                new ServiceEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "Wi-Fi",
@@ -26,7 +26,7 @@ namespace ConferenceRoomBooking.Dal.Db.Configurations.Entities
                     DateCreated = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
                 },
-                new Service
+                new ServiceEntity
                 {
                     Id = Guid.NewGuid(),
                     Name = "Звук",

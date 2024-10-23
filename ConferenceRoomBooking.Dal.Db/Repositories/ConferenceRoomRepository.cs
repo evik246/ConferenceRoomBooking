@@ -1,18 +1,18 @@
 ﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Bll.Common.Responces;
-using ConferenceRoomBooking.Bll.Common.Entities;
 using Microsoft.EntityFrameworkCore;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
+using ConferenceRoomBooking.Dal.Db.Entities;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
-    public class ConferenceRoomRepository : RepositoryBase<ConferenceRoom, ConferenceRoomFilterDto>, IConferenceRoomRepository
+    public class ConferenceRoomRepository : RepositoryBase<ConferenceRoom, ConferenceRoomFilter>, IConferenceRoomRepository
     {
         public ConferenceRoomRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
         {
         }
 
-        public override async Task<Result<ICollection<ConferenceRoom>>> GetAsync(ConferenceRoomFilterDto filter)
+        public override async Task<Result<ICollection<ConferenceRoom>>> GetAsync(ConferenceRoomFilter filter)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
             }
         }
 
-        public async Task<Result<ICollection<ConferenceRoom>>> GetAvailableRoomsAsync(ConferenceRoomFilterDto filter)
+        public async Task<Result<ICollection<ConferenceRoom>>> GetAvailableRoomsAsync(ConferenceRoomFilter filter)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
 
                 if (filter.Date.HasValue || filter.StartTime.HasValue || filter.EndTime.HasValue)
                 {
-                    var bookingsQuery = _dbContext.Set<Booking>().AsQueryable();
+                    var bookingsQuery = _dbContext.Set<BookingEntity>().AsQueryable();
 
                     DateTime startOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue;
                     DateTime endOfDay = filter.Date.HasValue ? filter.Date.Value.ToDateTime(TimeOnly.MaxValue) : DateTime.MaxValue;

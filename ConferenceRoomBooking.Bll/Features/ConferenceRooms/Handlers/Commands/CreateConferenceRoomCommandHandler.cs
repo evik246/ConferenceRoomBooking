@@ -1,54 +1,50 @@
-﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
-using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Commands;
-using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Bll.Features.ConferenceRooms.Requests.Commands;
 using MediatR;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest.Validators;
 using ConferenceRoomBooking.Bll.Common.Exceptions;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
+using ConferenceRoomBooking.Services.API.DTOs.ConferenceRoomRequest.Validators;
+using ConferenceRoomBooking.Bll.Common.Models.ServiceModels;
 
 namespace ConferenceRoomBooking.Bll.Features.ConferenceRooms.Handlers.Commands
 {
-    public class CreateConferenceRoomCommandHandler : IRequestHandler<CreateConferenceRoomCommand, Result<ConferenceRoomDto>>
+    public class CreateConferenceRoomCommandHandler : IRequestHandler<CreateConferenceRoomCommand, Result<ConferenceRoom>>
     {
         private readonly IConferenceRoomRepository _conferenceRoomRepository;
         private readonly IServiceRepository _serviceRepository;
-        private readonly IMapper _mapper;
 
-        public CreateConferenceRoomCommandHandler(IConferenceRoomRepository conferenceRoomRepository, IMapper mapper, IServiceRepository serviceRepository)
+        public CreateConferenceRoomCommandHandler(IConferenceRoomRepository conferenceRoomRepository, IServiceRepository serviceRepository)
         {
             _conferenceRoomRepository = conferenceRoomRepository;
             _serviceRepository = serviceRepository;
-            _mapper = mapper;
         }
 
-        public async Task<Result<ConferenceRoomDto>> Handle(CreateConferenceRoomCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ConferenceRoom>> Handle(CreateConferenceRoomCommand request, CancellationToken cancellationToken)
         {
-            var validator = new CreateConferenceRoomRequestDtoValidator();
-            var validationResult = await validator.ValidateAsync(request.CreateConferenceRoomRequestDto);
+            var validator = new CreateConferenceRoomValidator();
+            var validationResult = await validator.ValidateAsync(request.CreateConferenceRoomRequest);
 
             if (!validationResult.IsValid)
             {
-                return new Result<ConferenceRoomDto>(new ValidationModelException(validationResult));
+                return new Result<ConferenceRoom>(new ValidationModelException(validationResult));
             }
 
-            var conferenceRoom = _mapper.Map<ConferenceRoom>(request.CreateConferenceRoomRequestDto);
+            var conferenceRoom = request.CreateConferenceRoomRequest;
 
-            if (request.CreateConferenceRoomRequestDto.ServiceIds != null && 
-                request.CreateConferenceRoomRequestDto.ServiceIds.Any())
+            if (request.CreateConferenceRoomRequest.ServiceIds != null && 
+                request.CreateConferenceRoomRequest.ServiceIds.Any())
             {
-                var serviceFilter = new ServiceFilterDto() { Guids = request.CreateConferenceRoomRequestDto.ServiceIds.ToList() };
+                var serviceFilter = new ServiceFilter() { Guids = request.CreateConferenceRoomRequest.ServiceIds.ToList() };
                 var servicesResult = await _serviceRepository.GetAsync(serviceFilter);
 
                 var services = servicesResult.MatchSuccess(
                     services => services.ToList()
                 );
 
-                if (services.Count != request.CreateConferenceRoomRequestDto.ServiceIds.Count)
+                if (services.Count != request.CreateConferenceRoomRequest.ServiceIds.Count)
                 {
-                    return new Result<ConferenceRoomDto>(new NotFoundException(nameof(Service)));
+                    return new Result<ConferenceRoom>(new NotFoundException(nameof(Service)));
                 }
 
                 conferenceRoom.Services = services;
@@ -57,8 +53,8 @@ namespace ConferenceRoomBooking.Bll.Features.ConferenceRooms.Handlers.Commands
             var createdConferenceRoomResult = await _conferenceRoomRepository.AddAsync(conferenceRoom);
 
             return createdConferenceRoomResult.Match(
-                createdConferenceRoom => new Result<ConferenceRoomDto>(_mapper.Map<ConferenceRoomDto>(createdConferenceRoom)),
-                exception => new Result<ConferenceRoomDto>(exception)
+                createdConferenceRoom => new Result<ConferenceRoom>(createdConferenceRoom),
+                exception => new Result<ConferenceRoom>(exception)
             );
         }
     }

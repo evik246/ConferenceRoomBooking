@@ -5,6 +5,7 @@ using ConferenceRoomBooking.Bll.Features.Bookings.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Services.API.Controllers
 {
@@ -33,7 +34,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<BookingDto>>> Get([FromQuery] BookingFilterDto value)
         {
-            var request = new GetBookingListRequest() { BookingFilterDto = value };
+            var bookingFilter = _mapper.Map<BookingFilter>(value);
+            var request = new GetBookingListRequest() { BookingFilter = bookingFilter };
             var bookingsResult = await _mediator.Send(request);
 
             return bookingsResult.ToActionResult();
@@ -51,7 +53,8 @@ namespace ConferenceRoomBooking.Services.API.Controllers
         [HttpPost]
         public async Task<ActionResult<BookingDto>> Post([FromBody] CreateBookingRequestDto value)
         {
-            var command = new CreateBookingCommand() { CreateBookingRequestDto = value };
+            var createBooking = _mapper.Map<Booking>(value);
+            var command = new CreateBookingCommand() { CreateBookingRequest = createBooking };
             var createdBookingResult = await _mediator.Send(command);
 
             return createdBookingResult.ToActionResult(StatusCodes.Status201Created);

@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ConferenceRoomBooking.Dal.Db
 {
-    public static class InfrastructureServicesRegistration
+    public static class DalDbServicesRegistration
     {
-        public static IServiceCollection ConfigureInfrastructureServices(
+        public static IServiceCollection ConfigureDalDbServices(
             this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDbContext<ConferenceRoomBookingDbContext>(options =>

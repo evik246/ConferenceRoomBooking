@@ -1,28 +1,25 @@
-﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Common.DTOs.ServiceRequest;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
 using ConferenceRoomBooking.Bll.Features.Bookings.Requests.Queries;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
+using ConferenceRoomBooking.Bll.Common.Models.ServiceModels;
 
 namespace ConferenceRoomBooking.Bll.Features.Bookings.Handlers.Queries
 {
-    public class GetBookingReportRequestHandler : IRequestHandler<GetBookingReportRequest, Result<BookingReportDto>>
+    public class GetBookingReportRequestHandler : IRequestHandler<GetBookingReportRequest, Result<BookingReport>>
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly IMapper _mapper;
 
-        public GetBookingReportRequestHandler(IBookingRepository bookingRepository, IMapper mapper)
+        public GetBookingReportRequestHandler(IBookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
-            _mapper = mapper;
         }
 
-        public async Task<Result<BookingReportDto>> Handle(GetBookingReportRequest request, CancellationToken cancellationToken)
+        public async Task<Result<BookingReport>> Handle(GetBookingReportRequest request, CancellationToken cancellationToken)
         {
-            var filter = new BookingFilterDto
+            var filter = new BookingFilter
             {
                 StartDate = request.StartDate,
                 EndDate = request.EndDate
@@ -33,12 +30,12 @@ namespace ConferenceRoomBooking.Bll.Features.Bookings.Handlers.Queries
             return bookingsResult.Match(
                 bookings =>
                 {
-                    var bookingReport = new BookingReportDto
+                    var bookingReport = new BookingReport
                     {
                         TotalBookings = bookings.Count,
                         TotalRevenue = bookings.Sum(b => b.HourAmount * b.ConferenceRoom.PricePerHour),
                         RoomUsages = bookings.GroupBy(b => b.ConferenceRoom.Name)
-                            .Select(g => new ConferenceRoomUsageDto
+                            .Select(g => new ConferenceRoomUsage
                             {
                                 RoomName = g.Key,
                                 TotalBookings = g.Count(),
@@ -47,7 +44,7 @@ namespace ConferenceRoomBooking.Bll.Features.Bookings.Handlers.Queries
                             .ToList(),
                         ServiceUsages = bookings.SelectMany(b => b.Services)
                             .GroupBy(s => s.Name)
-                            .Select(g => new ServiceUsageDto
+                            .Select(g => new ServiceUsage
                             {
                                 ServiceName = g.Key,
                                 TotalBookings = g.Count(),
@@ -56,9 +53,9 @@ namespace ConferenceRoomBooking.Bll.Features.Bookings.Handlers.Queries
                             .ToList()
                     };
 
-                    return new Result<BookingReportDto>(bookingReport);
+                    return new Result<BookingReport>(bookingReport);
                 },
-                exception => new Result<BookingReportDto>(exception)
+                exception => new Result<BookingReport>(exception)
             );
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ConferenceRoomBooking.Bll.Common.Filters
+namespace ConferenceRoomBooking.Bll.Common.Models
 {
     public abstract class BaseFilter
     {

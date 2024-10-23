@@ -1,18 +1,17 @@
 ﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
-using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
 using ConferenceRoomBooking.Bll.Common.Responces;
-using ConferenceRoomBooking.Bll.Common.Entities;
 using Microsoft.EntityFrameworkCore;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
-    public class BookingRepository : RepositoryBase<Booking, BookingFilterDto>, IBookingRepository
+    public class BookingRepository : RepositoryBase<Booking, BookingFilter>, IBookingRepository
     {
         public BookingRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
         {
         }
 
-        public async override Task<Result<ICollection<Booking>>> GetAsync(BookingFilterDto filter)
+        public async override Task<Result<ICollection<Booking>>> GetAsync(BookingFilter filter)
         {
             try
             {

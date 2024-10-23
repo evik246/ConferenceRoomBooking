@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Bll.Common.Contracts.Services
 {

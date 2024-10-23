@@ -1,43 +1,40 @@
-﻿using AutoMapper;
-using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
+﻿using ConferenceRoomBooking.Bll.Common.Contracts.Repositories;
 using ConferenceRoomBooking.Bll.Common.Contracts.Services;
-using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
 using ConferenceRoomBooking.Bll.Features.Bookings.Requests.Queries;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
+using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
 
 namespace ConferenceRoomBooking.Bll.Features.Bookings.Handlers.Queries
 {
-    public class GetBookingListRequestHandler : IRequestHandler<GetBookingListRequest, Result<List<BookingDto>>>
+    public class GetBookingListRequestHandler : IRequestHandler<GetBookingListRequest, Result<List<Booking>>>
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly IMapper _mapper;
         private readonly IBookingService _priceCalculationService;
 
-        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IMapper mapper, IBookingService priceCalculationService)
+        public GetBookingListRequestHandler(IBookingRepository bookingRepository, IBookingService priceCalculationService)
         {
             _bookingRepository = bookingRepository;
-            _mapper = mapper;
             _priceCalculationService = priceCalculationService;
         }
 
-        public async Task<Result<List<BookingDto>>> Handle(GetBookingListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<List<Booking>>> Handle(GetBookingListRequest request, CancellationToken cancellationToken)
         {
-            var bookingResult = await _bookingRepository.GetAsync(request.BookingFilterDto);
+            var bookingResult = await _bookingRepository.GetAsync(request.BookingFilter);
 
             return bookingResult.Match(
             bookings => {
-                var bookingDtos = _mapper.Map<List<BookingDto>>(bookings.ToList());
+                var bookingModels = bookings.ToList();
 
                 foreach (var booking in bookings)
                 {
-                    var bookingDto = bookingDtos.First(b => b.Id == booking.Id);
-                    bookingDto.TotalPrice = _priceCalculationService.CalculateTotalPrice(booking);
+                    var bookingModel = bookingModels.First(b => b.Id == booking.Id);
+                    bookingModel.TotalPrice = _priceCalculationService.CalculateTotalPrice(booking);
                 }
 
-                return new Result<List<BookingDto>>(bookingDtos);
+                return new Result<List<Booking>>(bookingModels);
             },
-            exception => new Result<List<BookingDto>>(exception)
+            exception => new Result<List<Booking>>(exception)
         );
         }
     }

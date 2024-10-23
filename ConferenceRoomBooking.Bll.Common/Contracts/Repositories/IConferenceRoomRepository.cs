@@ -1,11 +1,10 @@
-﻿using ConferenceRoomBooking.Bll.Common.DTOs.ConferenceRoomRequest;
-using ConferenceRoomBooking.Bll.Common.Responces;
-using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Bll.Common.Responces;
+using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
 
 namespace ConferenceRoomBooking.Bll.Common.Contracts.Repositories
 {
-    public interface IConferenceRoomRepository : IRepositoryBase<ConferenceRoom, ConferenceRoomFilterDto>
+    public interface IConferenceRoomRepository : IRepositoryBase<ConferenceRoom, ConferenceRoomFilter>
     {
-        Task<Result<ICollection<ConferenceRoom>>> GetAvailableRoomsAsync(ConferenceRoomFilterDto filter);
+        Task<Result<ICollection<ConferenceRoom>>> GetAvailableRoomsAsync(ConferenceRoomFilter filter);
     }
 }
