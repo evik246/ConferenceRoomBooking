@@ -1,4 +1,4 @@
-﻿using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
+﻿using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
 using ConferenceRoomBooking.Bll.Common.Responces;
 using MediatR;
 

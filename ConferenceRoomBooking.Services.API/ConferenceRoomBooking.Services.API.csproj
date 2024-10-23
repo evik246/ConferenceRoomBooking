@@ -17,12 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConferenceRoomBooking.Dal.Db\ConferenceRoomBooking.Dal.Db.csproj" />
+    <ProjectReference Include="..\ConferenceRoomBooking.Bll\ConferenceRoomBooking.Bll.csproj" />
   </ItemGroup>
 
 </Project>

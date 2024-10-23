@@ -1,9 +1,10 @@
 ﻿using ConferenceRoomBooking.Services.API.Extensions;
-using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
+using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
 using ConferenceRoomBooking.Bll.Features.Bookings.Requests.Commands;
 using ConferenceRoomBooking.Bll.Features.Bookings.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace ConferenceRoomBooking.Services.API.Controllers
 {
@@ -12,10 +13,12 @@ namespace ConferenceRoomBooking.Services.API.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public BookingsController(IMediator mediator)
+        public BookingsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>

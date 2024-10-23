@@ -1,5 +1,5 @@
-﻿using ConferenceRoomBooking.Bll.Common.DTOs.BookingRequest;
-using ConferenceRoomBooking.Bll.Common.Entities;
+﻿using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
+using ConferenceRoomBooking.Bll.Common.Models;
 
 namespace ConferenceRoomBooking.Bll.Common.Contracts.Repositories
 {

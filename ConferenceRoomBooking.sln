@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConferenceRoomBooking.Services.API", "ConferenceRoomBooking.Services.API\ConferenceRoomBooking.Services.API.csproj", "{2E8478B2-9B54-47D8-BBA6-0CD0C2B14098}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConferenceRoomBooking.Bll", "ConferenceRoomBooking.Bll\ConferenceRoomBooking.Bll.csproj", "{C3AC70F2-4E2B-444B-9F57-093CC144A1C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37B0703F-E9C9-429C-9CD9-8DF337D6ADD8} = {37B0703F-E9C9-429C-9CD9-8DF337D6ADD8}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConferenceRoomBooking.Bll.Common", "ConferenceRoomBooking.Bll.Common\ConferenceRoomBooking.Bll.Common.csproj", "{37B0703F-E9C9-429C-9CD9-8DF337D6ADD8}"
 EndProject
