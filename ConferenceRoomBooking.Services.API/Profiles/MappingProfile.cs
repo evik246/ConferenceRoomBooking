@@ -6,7 +6,7 @@ using ConferenceRoomBooking.Services.API.DTOs.BookingRequest;
 using ConferenceRoomBooking.Services.API.DTOs.ConferenceRoomRequest;
 using ConferenceRoomBooking.Services.API.DTOs.ServiceRequest;
 
-namespace ConferenceRoomBooking.Bll.Profiles
+namespace ConferenceRoomBooking.Services.API.Profiles
 {
     public class MappingProfile : Profile
     {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
-    public class RepositoryBase<T, F> : IRepositoryBase<T, F> 
+    public class RepositoryBase<T, F> : IRepositoryBase<T, F>
         where T : class 
         where F : BaseFilter
     {

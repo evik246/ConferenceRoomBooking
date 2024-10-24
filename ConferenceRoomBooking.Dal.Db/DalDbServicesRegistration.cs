@@ -5,6 +5,7 @@ using ConferenceRoomBooking.Dal.Db.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace ConferenceRoomBooking.Dal.Db
 {
@@ -13,13 +14,13 @@ namespace ConferenceRoomBooking.Dal.Db
         public static IServiceCollection ConfigureDalDbServices(
             this IServiceCollection services, IConfiguration configuration) 
         {
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<ConferenceRoomBookingDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("ConferenceRoomBookingConnectionString")
             ));
 
             services.AddScoped(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
-            
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
