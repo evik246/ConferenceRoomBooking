@@ -2,20 +2,22 @@
 using ConferenceRoomBooking.Bll.Common.Responces;
 using Microsoft.EntityFrameworkCore;
 using ConferenceRoomBooking.Bll.Common.Models.BookingModels;
+using ConferenceRoomBooking.Dal.Db.Entities;
+using ConferenceRoomBooking.Dal.Db.Mappers;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
-    public class BookingRepository : RepositoryBase<Booking, BookingFilter>, IBookingRepository
+    public class BookingRepository : RepositoryBase<Booking, BookingEntity, BookingFilter>, IBookingRepository
     {
-        public BookingRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
+        public BookingRepository(ConferenceRoomBookingDbContext dbContext, IEntityMapper<Booking, BookingEntity> mapper) : base(dbContext, mapper)
         {
         }
 
         public async override Task<Result<ICollection<Booking>>> GetAsync(BookingFilter filter)
         {
-            try
+            try 
             {
-                var query = _dbContext.Set<Booking>()
+                var query = _dbContext.Set<BookingEntity>()
                     .Include(b => b.ConferenceRoom)
                     .Include(b => b.Services)
                     .AsQueryable();
@@ -37,8 +39,10 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
 
                 query = query.Skip(filter.Skip).Take(filter.PageSize);
 
-                var bookings = await query.ToListAsync();
-                return new Result<ICollection<Booking>>(bookings);
+                var bookingEntities = await query.ToListAsync();
+                var bookingModels = bookingEntities.Select(_mapper.MapToModel).ToList();
+
+                return new Result<ICollection<Booking>>(bookingModels);
             }
             catch (Exception ex)
             {

@@ -3,12 +3,13 @@ using ConferenceRoomBooking.Bll.Common.Responces;
 using Microsoft.EntityFrameworkCore;
 using ConferenceRoomBooking.Bll.Common.Models.ConferenceRoomModels;
 using ConferenceRoomBooking.Dal.Db.Entities;
+using ConferenceRoomBooking.Dal.Db.Mappers;
 
 namespace ConferenceRoomBooking.Dal.Db.Repositories
 {
-    public class ConferenceRoomRepository : RepositoryBase<ConferenceRoom, ConferenceRoomFilter>, IConferenceRoomRepository
+    public class ConferenceRoomRepository : RepositoryBase<ConferenceRoom, ConferenceRoomEntity, ConferenceRoomFilter>, IConferenceRoomRepository
     {
-        public ConferenceRoomRepository(ConferenceRoomBookingDbContext dbContext) : base(dbContext)
+        public ConferenceRoomRepository(ConferenceRoomBookingDbContext dbContext, IEntityMapper<ConferenceRoom, ConferenceRoomEntity> mapper) : base(dbContext, mapper)
         {
         }
 
@@ -16,7 +17,7 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
         {
             try
             {
-                var query = _dbContext.Set<ConferenceRoom>()
+                var query = _dbContext.Set<ConferenceRoomEntity>()
                     .Include(b => b.Services)
                     .AsQueryable();
 
@@ -42,9 +43,10 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
 
                 query = query.Skip(filter.Skip).Take(filter.PageSize);
 
-                var conferenceRooms = await query.ToListAsync();
+                var conferenceRoomEntities = await query.ToListAsync();
+                var conferenceRoomModels = conferenceRoomEntities.Select(_mapper.MapToModel).ToList();
 
-                return new Result<ICollection<ConferenceRoom>>(conferenceRooms);
+                return new Result<ICollection<ConferenceRoom>>(conferenceRoomModels);
             }
             catch (Exception ex) 
             {
@@ -56,7 +58,7 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
         {
             try
             {
-                var query = _dbContext.Set<ConferenceRoom>()
+                var query = _dbContext.Set<ConferenceRoomEntity>()
                     .Include(b => b.Services)
                     .AsQueryable();
 
@@ -117,9 +119,10 @@ namespace ConferenceRoomBooking.Dal.Db.Repositories
 
                 query = query.Skip(filter.Skip).Take(filter.PageSize);
 
-                var conferenceRooms = await query.ToListAsync();
+                var conferenceRoomEntities = await query.ToListAsync();
+                var conferenceRoomModels = conferenceRoomEntities.Select(_mapper.MapToModel).ToList();
 
-                return new Result<ICollection<ConferenceRoom>>(conferenceRooms);
+                return new Result<ICollection<ConferenceRoom>>(conferenceRoomModels);
             }
             catch (Exception ex) 
             {

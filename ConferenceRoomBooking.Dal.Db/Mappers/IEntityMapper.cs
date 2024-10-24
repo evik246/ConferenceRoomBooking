@@ -1,4 +1,4 @@
-﻿namespace ConferenceRoomBooking.Dal.Db
+﻿namespace ConferenceRoomBooking.Dal.Db.Mappers
 {
     public interface IEntityMapper<TModel, TEntity>
     {
